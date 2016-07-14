@@ -1,0 +1,28 @@
+Issue 1: In Annotation Tree, display author_name based on author_type
+Module: hc_base
+Model: hc.annotation
+
+author_name = fields.Char(compute="_compute_author_name")
+
+@api.multi
+def _compute_author_name(self):
+    for hc_annot in self:
+        if hc_annot.author_type == 'practitioner':
+            hc_annot.author_name = hc_annot.author_practitioner_id.name
+        elif hc_annot.author_type == 'patient':
+            hc_annot.author_name = hc_annot.author_patient_id.name
+        elif hc_annot.author_type == 'related person':
+            hc_annot.author_name = hc_annot.author_related_person_id.name
+
+
+Issue 2: If create record from patient view, contact should show patient=True
+
+module: hc_person
+file: hc_res_person
+method: create
+Add a line: vals['is_patient'] = self.env.context.get('is_patient', False)
+
+module: hc_patient
+xml: hc_res_patient_view_form
+add context to name like below:
+<field name="person_id" default_focus="1" placeholder="Name" context="{'is_patient': True}"/>
