@@ -1,6 +1,6 @@
 Issue 1: In Annotation Tree, display author_name based on author_type
 Module: hc_base
-Model: hc.annotation
+Model: hc.annotation 
 
 author_name = fields.Char(compute="_compute_author_name")
 
